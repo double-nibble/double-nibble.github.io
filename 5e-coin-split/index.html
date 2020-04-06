@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://bootswatch.com/4/darkly/_variables.scss" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://bootswatch.com/4/darkly/_bootswatch.scss" crossorigin="anonymous">
+    <title>5e Coin Splitter</title>
+  </head>
+  <body>
+      <div class="container">
+      <div class="bs-docs-section clearfix">
+          <div class="row">
+              <div class="col-lg-12">
+                  <p>&nbsp;</p>
+                  <div class="page-header"><h2>Split Coins</h2></div>
+                  <p>&nbsp;</p>
+                  <div class="bs-component">
+                      <button onclick="toggle('platinum');" class="btn btn-outline-primary" type="button" id="platinum_enable">Platinum</button>
+                      <button onclick="toggle('gold');" class="btn btn-primary" type="button" id="gold_enable">Gold</button>
+                      <button onclick="toggle('electrum');" class="btn btn-outline-primary" type="button" id="electrum_enable">Electrum</button>
+                      <button onclick="toggle('silver');" class="btn btn-primary" type="button" id="silver_enable">Silver</button>
+                      <button onclick="toggle('copper');" class="btn btn-primary" type="button" id="copper_enable">Copper</button>
+                  </div>
+                  <p>&nbsp;</p>
+                  <div class="bs-component">
+                      <form>
+                          <div class="form-group">
+                              <div class="row">
+                                  Value to split:
+                                  <div class="col-lg-2">
+                                      <input id="platinum" class="form-control" placeholder="platinum" type="text" style="display: none">
+                                      <input id="gold" class="form-control" placeholder="gold" type="text">
+                                      <input id="electrum" class="form-control" placeholder="electrum" type="text" style="display: none">
+                                      <input id="silver" class="form-control" placeholder="silver" type="text">
+                                      <input id="copper" class="form-control" placeholder="copper" type="text">
+                                  </div>
+                              </div>
+                          </div>
+                      </form>
+                  </div>
+                  <p>&nbsp;</p>
+                  <div class="bs-component">
+                      <form>
+                          <div class="form-group">
+                              <div class="row">
+                                  Number of shares:
+                                  <div class="col-lg-2">
+                                      <input id="divisions" class="form-control" placeholder="divisions" type="text" value="1">
+                                  </div>
+                              </div>
+                          </div>
+                      </form>
+                  </div>
+                  <p>&nbsp;</p>
+                  <div class="bs-component">
+                      <button class="btn btn-success" type="button" onclick="calculate();">Go</button>
+                      <button class="btn btn-danger" type="button" onclick="reset();">Reset</button>
+                  </div>
+                  <p>&nbsp;</p>
+                  <div class="bs-component" style="display: none" id="result"></div>
+              </div>
+          </div>
+      </div>
+      </div>
+  <script lang="text/javascript">
+
+const currency = {
+    'platinum': 1000,
+    'gold': 100,
+    'electrum': 20,
+    'silver': 10,
+    'copper': 1
+};
+
+var enabled_currencies = ['gold', 'silver', 'copper'];
+
+// Toggle a coin type
+function toggle(e) {
+    const x = document.getElementById(e);
+    // Enable coin
+    if (x.style.display === "none") {
+        x.style.display = "block";
+        document.getElementById(e+'_enable').className = "btn btn-primary";
+        enabled_currencies.push(e);
+    // Disable coin
+    } else {
+        x.style.display = "none";
+        document.getElementById(e+'_enable').className = "btn btn-outline-primary";
+        enabled_currencies = enabled_currencies.filter(x => x !== e);
+    }
+}
+
+// Split, then assign coin values
+function calculate() {
+    var sum = 0;
+    for (const i in enabled_currencies) {
+        const cur = enabled_currencies[i];
+        sum += currency[cur] * document.getElementById(cur).value;
+    }
+    sum = parseInt(sum / document.getElementById('divisions').value);
+    const result = document.getElementById('result');
+    result.innerHTML = "<h2>Result:</h2>"
+    for (const cur in currency) {
+        if (enabled_currencies.includes(cur)) {
+            if (sum >= currency[cur]) {
+                result.innerHTML += ` ${parseInt(sum / currency[cur])} ${cur}`;
+                sum %= currency[cur];
+            }
+        }
+    }
+    result.style.display = "block";
+}
+
+// Reset all values
+function reset() {
+    for (const cur in currency) {
+        document.getElementById(cur).value = '';
+    }
+}
+
+  </script>
+  </body>
+</html>

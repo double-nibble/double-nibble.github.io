@@ -67,14 +67,14 @@
   <script lang="text/javascript">
 
 const currency = {
-    'platinum': 1000,
-    'gold': 100,
-    'electrum': 20,
-    'silver': 10,
-    'copper': 1
+    "platinum": 1000,
+    "gold": 100,
+    "electrum": 20,
+    "silver": 10,
+    "copper": 1
 };
 
-var enabled_currencies = ['gold', 'silver', 'copper'];
+var enabled_currencies = ["gold", "silver", "copper"];
 
 // Toggle a coin type
 function toggle(e) {
@@ -82,12 +82,12 @@ function toggle(e) {
     // Enable coin
     if (x.style.display === "none") {
         x.style.display = "block";
-        document.getElementById(e+'_enable').className = "btn btn-primary";
+        document.getElementById(e+"_enable").className = "btn btn-primary";
         enabled_currencies.push(e);
     // Disable coin
     } else {
         x.style.display = "none";
-        document.getElementById(e+'_enable').className = "btn btn-outline-primary";
+        document.getElementById(e+"_enable").className = "btn btn-outline-primary";
         enabled_currencies = enabled_currencies.filter(x => x !== e);
     }
 }
@@ -99,8 +99,8 @@ function calculate() {
         const cur = enabled_currencies[i];
         sum += currency[cur] * document.getElementById(cur).value;
     }
-    sum = parseInt(sum / document.getElementById('divisions').value);
-    const result = document.getElementById('result');
+    sum = parseInt(sum / document.getElementById("divisions").value);
+    const result = document.getElementById("result");
     result.innerHTML = "<h2>Result:</h2>"
     for (const cur in currency) {
         if (enabled_currencies.includes(cur)) {
@@ -113,11 +113,13 @@ function calculate() {
     result.style.display = "block";
 }
 
-// Reset all values
+// Reset all except number of splits
 function reset() {
     for (const cur in currency) {
-        document.getElementById(cur).value = '';
+        document.getElementById(cur).value = "";
     }
+    document.getElementById("result").innerHTML = "";
+    document.getElementById("result").style.display = "none";
 }
 
   </script>
